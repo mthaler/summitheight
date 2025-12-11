@@ -35,7 +35,7 @@ func main() {
     	fmt.Println("Found table")
 		e.ForEach("tr", func(_ int, el *colly.HTMLElement) {
 			s := Summit{ Name: el.ChildText("td:nth-child(2)") }
-			fmt.Println(s.Name)
+			fmt.Printf("%+v\n", s)
 		})
 	})
 
