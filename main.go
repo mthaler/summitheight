@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -22,11 +23,24 @@ func main() {
  	// Define the URL you want to scrape
  	url := "https://www.deine-berge.de/POIs/Filter/Kategorie-1-Berg-Gipfel+Gebirge-13-Chiemgauer-Alpen/Alle"
 
-	println("I am here")
-
-	c.OnHTML("tr", func(e *colly.HTMLElement) {
-    	println("Found an tr tag!")
+	c.OnRequest(func(r *colly.Request) {
+		fmt.Println("Scraping:", r.URL)
 	})
+
+	c.OnResponse(func(r *colly.Response) {
+       	fmt.Println("Status:", r.StatusCode)
+   	})
+
+	c.OnHTML("table", func(e *colly.HTMLElement) {
+    	fmt.Println("Found table")
+		e.ForEach("tr", func(_ int, el *colly.HTMLElement) {
+			fmt.Println(el.ChildText("td:nth-child(2)"))
+		})
+	})
+
+	c.OnError(func(r *colly.Response, err error) {
+    	fmt.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
+   	})
 
 	// Visit the URL and start scraping
 	err = c.Visit(url)
