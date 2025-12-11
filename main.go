@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/gocolly/colly/v2"
 )
@@ -32,9 +33,24 @@ func main() {
    	})
 
 	c.OnHTML("table", func(e *colly.HTMLElement) {
-    	fmt.Println("Found table")
 		e.ForEach("tr", func(_ int, el *colly.HTMLElement) {
-			s := Summit{ Name: el.ChildText("td:nth-child(2)") }
+			heightText := el.ChildText("td:nth-child(3)")
+			if (heightText != "") {
+				heightText = heightText[:len(heightText)-1]
+			}
+			fmt.Println(heightText)
+			height, err := strconv.Atoi(heightText)
+			if err != nil {
+				fmt.Printf("Could not convert %s to int")
+			}
+			s := Summit{ Name: el.ChildText("td:nth-child(2)"),
+				 Kategorie: el.ChildText("td:nth-child(4)"),
+				 Height: height,
+				 Staat: el.ChildText("td:nth-child(5)"),
+				 Region: el.ChildText("td:nth-child(6)"),
+				 Gruppe: el.ChildText("td:nth-child(7)"),
+				 Information: el.ChildText("td:nth-child(8)"),
+			}
 			fmt.Printf("%+v\n", s)
 		})
 	})

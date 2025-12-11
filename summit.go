@@ -4,8 +4,9 @@ package main
 type Summit struct {
 	Name        string
 	Height      int
-	Land        string
+	Kategorie   string
+	Staat       string
 	Region		string
 	Gruppe		string
-	information string
+	Information string
 }
