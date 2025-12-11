@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/gocolly/colly/v2"
@@ -31,10 +31,13 @@ func main() {
 		colly.CacheExpiration(24*time.Hour),
 	)
 
+	fmt.Println("I am here")
+
 	// On every <a> element which has "href" attribute call callback
-	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
+	c.OnHTML("tr", func(e *colly.HTMLElement) {
 		// If attribute class is this long string return from callback
 		// As this a is irrelevant
+		fmt.Println(e)
 	})
 
 	// Before making a request print "Visiting ..."
@@ -42,7 +45,7 @@ func main() {
 		log.Println("visiting", r.URL.String())
 	})
 
-	summits := make([]Summit, 0, 200)
+	//summits := make([]Summit, 0, 200)
 
 		// Start scraping on http://coursera.com/browse
 	c.Visit("https://www.deine-berge.de/POIs/Filter/Kategorie-1-Berg-Gipfel+Gebirge-13-Chiemgauer-Alpen/Alle")
