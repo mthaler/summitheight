@@ -35,16 +35,6 @@ func main() {
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		// If attribute class is this long string return from callback
 		// As this a is irrelevant
-		if e.Attr("class") == "Button_1qxkboh-o_O-primary_cv02ee-o_O-md_28awn8-o_O-primaryLink_109aggg" {
-			return
-		}
-		link := e.Attr("href")
-		// If link start with browse or includes either signup or login return from callback
-		if !strings.HasPrefix(link, "/browse") || strings.Index(link, "=signup") > -1 || strings.Index(link, "=login") > -1 {
-			return
-		}
-		// start scaping the page under the link found
-		e.Request.Visit(link)
 	})
 
 	// Before making a request print "Visiting ..."
@@ -55,5 +45,5 @@ func main() {
 	summits := make([]Summit, 0, 200)
 
 		// Start scraping on http://coursera.com/browse
-	c.Visit("https://coursera.org/browse")
+	c.Visit("https://www.deine-berge.de/POIs/Filter/Kategorie-1-Berg-Gipfel+Gebirge-13-Chiemgauer-Alpen/Alle")
 }
