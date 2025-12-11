@@ -1,5 +1,13 @@
 package main
 
+import (
+	"log"
+	"os"
+
+	"github.com/gocolly/colly/v2"
+)
+
+
 func main() {
 	fName := "heights.csv"
 	file, err := os.Create(fName)
@@ -20,4 +28,6 @@ func main() {
 		// Cached responses older than the specified duration will be refreshed
 		colly.CacheExpiration(24*time.Hour),
 	)
+
+	heights := make([]Height, 0, 200)
 }
