@@ -24,8 +24,8 @@ func main() {
 
 	println("I am here")
 
-	c.OnHTML("html", func(e *colly.HTMLElement) {
-    	println("Found an HTML tag!")
+	c.OnHTML("tr", func(e *colly.HTMLElement) {
+    	println("Found an tr tag!")
 	})
 
 	// Visit the URL and start scraping
