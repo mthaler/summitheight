@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
+	"time"
 
 	"github.com/gocolly/colly/v2"
 )
@@ -52,6 +54,6 @@ func main() {
 
 	summits := make([]Summit, 0, 200)
 
-	// Start scraping on http://coursera.com/browse
+		// Start scraping on http://coursera.com/browse
 	c.Visit("https://coursera.org/browse")
 }
