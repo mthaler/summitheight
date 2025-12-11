@@ -34,7 +34,8 @@ func main() {
 	c.OnHTML("table", func(e *colly.HTMLElement) {
     	fmt.Println("Found table")
 		e.ForEach("tr", func(_ int, el *colly.HTMLElement) {
-			fmt.Println(el.ChildText("td:nth-child(2)"))
+			s := Summit{ Name: el.ChildText("td:nth-child(2)") }
+			fmt.Println(s.Name)
 		})
 	})
 
