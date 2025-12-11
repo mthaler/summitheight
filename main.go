@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
 	"log"
 	"os"
@@ -24,6 +25,9 @@ func main() {
  	// Define the URL you want to scrape
  	url := "https://www.deine-berge.de/POIs/Filter/Kategorie-1-Berg-Gipfel+Gebirge-13-Chiemgauer-Alpen/Alle"
 
+	var summits []Summit
+	summits = make([]Summit, 1000)
+
 	c.OnRequest(func(r *colly.Request) {
 		fmt.Println("Scraping:", r.URL)
 	})
@@ -36,9 +40,8 @@ func main() {
 		e.ForEach("tr", func(_ int, el *colly.HTMLElement) {
 			heightText := el.ChildText("td:nth-child(3)")
 			if (heightText != "") {
-				heightText = heightText[:len(heightText)-1]
+				heightText = heightText[:len(heightText)-2]
 			}
-			fmt.Println(heightText)
 			height, err := strconv.Atoi(heightText)
 			if err != nil {
 				fmt.Printf("Could not convert %s to int")
@@ -51,7 +54,7 @@ func main() {
 				 Gruppe: el.ChildText("td:nth-child(7)"),
 				 Information: el.ChildText("td:nth-child(8)"),
 			}
-			fmt.Printf("%+v\n", s)
+			summits = append(summits, s)
 		})
 	})
 
@@ -64,4 +67,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	w := csv.NewWriter(file)
+	defer w.Flush()
+
+	w.WriteAll(summits)
 }
