@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 
 	"github.com/gocolly/colly/v2"
 )
@@ -38,20 +37,19 @@ func main() {
 
 	c.OnHTML("table", func(e *colly.HTMLElement) {
 		e.ForEach("tr", func(_ int, el *colly.HTMLElement) {
-			heightText := el.ChildText("td:nth-child(3)")
-			if (heightText != "") {
-				heightText = heightText[:len(heightText)-2]
+			height := el.ChildText("td:nth-child(3)")
+			if (height != "") {
+				height = height[:len(height)-2]
 			}
-			height, err := strconv.Atoi(heightText)
 			if err != nil {
 				fmt.Printf("Could not convert %s to int")
 			}
 			s := Summit{ Name: el.ChildText("td:nth-child(2)"),
-				 Kategorie: el.ChildText("td:nth-child(4)"),
+				 Category: el.ChildText("td:nth-child(4)"),
 				 Height: height,
-				 Staat: el.ChildText("td:nth-child(5)"),
+				 Country: el.ChildText("td:nth-child(5)"),
 				 Region: el.ChildText("td:nth-child(6)"),
-				 Gruppe: el.ChildText("td:nth-child(7)"),
+				 Group: el.ChildText("td:nth-child(7)"),
 				 Information: el.ChildText("td:nth-child(8)"),
 			}
 			summits = append(summits, s)
@@ -71,5 +69,11 @@ func main() {
 	w := csv.NewWriter(file)
 	defer w.Flush()
 
-	w.WriteAll(summits)
+	var result [][]string
+	result = make([][]string, 1000)
+	for _, summit := range summits {
+		result = append(result, summit.toSlice())
+	}
+
+	w.WriteAll(result)
 }
