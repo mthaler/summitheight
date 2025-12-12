@@ -14,7 +14,7 @@ type Summit struct {
 
 func (s Summit) toSlice() []string {
 	var result []string
-	result = make([]string, 8)
+	result = make([]string, 0)
 	result = append(result, s.Name)
 	result = append(result, s.Height)
 	result = append(result, s.Category)

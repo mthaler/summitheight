@@ -11,7 +11,7 @@ import (
 
 
 func main() {
-	fName := "heights.csv"
+	fName := "summits.csv"
 	file, err := os.Create(fName)
 	if err != nil {
 		log.Fatalf("Cannot create file %q: %s\n", fName, err)
@@ -19,13 +19,13 @@ func main() {
 	}
 	defer file.Close()
 
+	w := csv.NewWriter(file)
+	defer w.Flush()
+
  	c := colly.NewCollector()
 
  	// Define the URL you want to scrape
  	url := "https://www.deine-berge.de/POIs/Filter/Kategorie-1-Berg-Gipfel+Gebirge-13-Chiemgauer-Alpen/Alle"
-
-	var summits []Summit
-	summits = make([]Summit, 1000)
 
 	c.OnRequest(func(r *colly.Request) {
 		fmt.Println("Scraping:", r.URL)
@@ -52,7 +52,7 @@ func main() {
 				 Group: el.ChildText("td:nth-child(7)"),
 				 Information: el.ChildText("td:nth-child(8)"),
 			}
-			summits = append(summits, s)
+			w.Write(s.toSlice())
 		})
 	})
 
@@ -65,15 +65,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	w := csv.NewWriter(file)
-	defer w.Flush()
-
-	var result [][]string
-	result = make([][]string, 1000)
-	for _, summit := range summits {
-		result = append(result, summit.toSlice())
-	}
-
-	w.WriteAll(result)
 }
